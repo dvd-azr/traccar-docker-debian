@@ -1,0 +1,14 @@
+version: '3.8'  # Specify the Docker Compose version
+
+services:
+  traccar:
+    image: my-traccar-image  # Use the built image
+    container_name: traccar
+    hostname: traccar
+    restart: unless-stopped
+    ports:
+      - "80:8082"
+      - "5000-5150:5000-5150"
+      - "5000-5150:5000-5150/udp"
+    volumes:
+      - /opt/traccar/logs:/opt/traccar/logs:rw
