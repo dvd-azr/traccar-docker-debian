@@ -6,19 +6,25 @@ ENV TRACCAR_VERSION 6.5
 WORKDIR /opt/traccar
 
 RUN set -ex; \
-  apt-get update; \
-  TERM=xterm DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-  openjdk-17-jre-headless \
-  apt-get autoremove --yes \
-  apt-get clean; \
-  rm -rf /var/lib/apt/lists/* /tmp/*
+    apt-get update; \
+    TERM=xterm DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
+      openjdk-17-jre-headless \
+      unzip \
+      wget; \
+    wget -qO /tmp/traccar.zip https://github.com/traccar/traccar/releases/download/v$TRACCAR_VERSION/traccar-other-$TRACCAR_VERSION.zip; \
+    unzip -qo /tmp/traccar.zip -d /opt/traccar; \
+    apt-get autoremove --yes unzip wget; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/*
 
 # REF : https://github.com/traccar/traccar-docker#readme
+# Create the logs directory
+RUN mkdir -p /opt/traccar/logs
 
 # Copy the configuration file from the host to the container
 # Make sure you have traccar.xml in the same directory as your Dockerfile
-# COPY traccar.xml /opt/traccar/conf/traccar.xml
-COPY . .
+COPY traccar.xml /opt/traccar/conf/traccar.xml
+
 # Expose the necessary ports
 EXPOSE 80 5000-5150
 # Set the entrypoint for the container
