@@ -17,7 +17,20 @@ RUN set -ex; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
-EXPOSE 8082
-ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true"]
+# REF : https://github.com/traccar/traccar-docker#readme
+# Create the logs directory
+RUN mkdir -p /opt/traccar/logs
 
-CMD ["-jar", "tracker-server.jar", "conf/traccar.xml"]
+# Copy the configuration file from the host to the container
+# Make sure you have traccar.xml in the same directory as your Dockerfile
+COPY traccar.xml /opt/traccar/conf/traccar.xml
+
+# Expose the necessary ports
+EXPOSE 80 5000-5150
+# Set the entrypoint for the container
+ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true", "-jar", "/opt/traccar/tracker-server.jar", "/opt/traccar/conf/traccar.xml"]
+
+# 
+# ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true"]
+
+# CMD ["-jar", "tracker-server.jar", "conf/traccar.xml"]
