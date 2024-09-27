@@ -17,6 +17,7 @@ RUN set -ex; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
+EXPOSE 8082
 ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true"]
 
 CMD ["-jar", "tracker-server.jar", "conf/traccar.xml"]
