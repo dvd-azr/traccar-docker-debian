@@ -8,7 +8,7 @@ WORKDIR /opt/traccar
 RUN set -ex; \
   apt-get update; \
   TERM=xterm DEBIAN_FRONTEND=noninteractive apt-get install --yes --no-install-recommends \
-  openjdk-17-jre-headless \
+  openjdk-17-jre-headless;\
   apt-get autoremove --yes \
   apt-get clean; \
   rm -rf /var/lib/apt/lists/* /tmp/*
